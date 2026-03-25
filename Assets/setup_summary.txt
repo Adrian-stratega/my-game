@@ -1,0 +1,1 @@
+Folder structure and scene hierarchy organized. Base folders for Scripts, Prefabs, and GameAssets created. Scene root objects grouped into [Managers], [Environment], etc.
