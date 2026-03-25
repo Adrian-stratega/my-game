@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "com.ivanmurzak.unity.mcp": "0.59.0",
+    "com.ivanmurzak.unity.mcp": "0.60.0",
     "com.ivanmurzak.unity.mcp.animation": "1.1.15",
     "com.ivanmurzak.unity.mcp.particlesystem": "1.0.42",
     "com.ivanmurzak.unity.mcp.probuilder": "1.0.54",
