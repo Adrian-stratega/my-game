@@ -15,6 +15,8 @@ namespace IndiGame.Core
                 return;
             }
             Instance = this;
+            // Debe ser root para que DontDestroyOnLoad funcione correctamente
+            transform.SetParent(null);
             DontDestroyOnLoad(gameObject);
         }
 
