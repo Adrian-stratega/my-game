@@ -21,6 +21,8 @@ namespace IndiGame.Player
         public float bobAmplitude = 0.05f;
         public float bobFrequency = 1.5f;
 
+        [HideInInspector] public bool canMove = true;
+
         private CharacterController characterController;
         private float cameraPitch = 0f;
         private float defaultCameraY;
@@ -41,6 +43,8 @@ namespace IndiGame.Player
 
         private void Update()
         {
+            if (!canMove) return;
+
             HandleMovement();
             HandleLook();
             HandleHeadBob();

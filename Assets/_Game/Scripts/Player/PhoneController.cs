@@ -40,6 +40,9 @@ namespace IndiGame.Player
         [Header("References")]
         [SerializeField] private CanvasGroup phoneCanvasGroup;
         [SerializeField] private RectTransform phonePanel;
+        [SerializeField] private GameObject phoneCanvas;
+
+        private PlayerController playerController;
         [SerializeField] private Camera playerCamera;
         [SerializeField] private Volume postProcessVolume;
 
@@ -56,12 +59,16 @@ namespace IndiGame.Player
 
         private void Awake()
         {
+            playerController = GetComponent<PlayerController>();
+
             if (postProcessVolume != null && postProcessVolume.profile.TryGet(out vignette))
             {
                 // Cache vignette
             }
 
             if (playerCamera == null) playerCamera = Camera.main;
+            
+            if (phoneCanvas != null) phoneCanvas.SetActive(false);
             
             SetState(PhoneState.PHONE_HIDDEN, true);
         }
@@ -138,6 +145,26 @@ namespace IndiGame.Player
 
             PhoneState oldState = currentState;
             currentState = newState;
+
+            // Bloqueo de movimiento y cursor
+            if (playerController != null)
+            {
+                playerController.canMove = (newState != PhoneState.PHONE_FULLSCREEN);
+            }
+
+            if (newState == PhoneState.PHONE_FULLSCREEN)
+            {
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            }
+            else
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            }
+
+            if (phoneCanvas != null && newState != PhoneState.PHONE_HIDDEN)
+                phoneCanvas.SetActive(true);
 
             StopAllCoroutines();
             StartCoroutine(TransitionRoutine(newState, immediate));
@@ -220,17 +247,8 @@ namespace IndiGame.Player
             if (playerCamera != null) playerCamera.fieldOfView = targetFOV;
             if (phonePanel != null) phonePanel.anchoredPosition = targetPos;
             
-            // Bloquear entrada del mundo en Fullscreen
-            if (state == PhoneState.PHONE_FULLSCREEN)
-            {
-                Cursor.lockState = CursorLockMode.None;
-                Cursor.visible = true;
-            }
-            else
-            {
-                Cursor.lockState = CursorLockMode.Locked;
-                Cursor.visible = false;
-            }
+            if (state == PhoneState.PHONE_HIDDEN && phoneCanvas != null)
+                phoneCanvas.SetActive(false);
         }
         
         /// <summary>
