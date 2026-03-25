@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cacdc39f0f4820c439a90f3315cf8fcc, type: 3}
+  m_Name: TestSequence_Intro
+  m_EditorClassIdentifier: Assembly-CSharp::IndiGame.Core.MessageSequence
+  messages:
+  - {fileID: 11400000, guid: f6ea56307d585204f81bc12d149e7a24, type: 2}
+  - {fileID: 11400000, guid: 0c7c0bb5db9218842961d1a61faad821, type: 2}
+  - {fileID: 11400000, guid: 91ba9c48e157b5b40bb5beb0965f7a76, type: 2}

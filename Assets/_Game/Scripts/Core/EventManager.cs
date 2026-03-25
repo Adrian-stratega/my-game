@@ -3,12 +3,6 @@ using UnityEngine;
 
 namespace IndiGame.Core
 {
-    public class MessageData
-    {
-        public string Sender;
-        public string Content;
-    }
-
     public class EventManager : MonoBehaviour
     {
         public static EventManager Instance { get; private set; }

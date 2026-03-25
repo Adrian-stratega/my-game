@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e5efe6a7efcb1f4fb0cf24ea7f42a0d, type: 3}
+  m_Name: Intro_Msg2
+  m_EditorClassIdentifier: Assembly-CSharp::IndiGame.Core.MessageData
+  senderName: "QuickRun \U0001F680"
+  messageText: "Dir\xEDgete a Av. Siempre Viva 742. El cliente est\xE1 esperando."
+  delayBeforeNext: 0.5
+  isPlayerResponse: 0
+  tone: 1

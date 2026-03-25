@@ -22,7 +22,9 @@ namespace IndiGame.Phone
 
         [Header("Badge UI")]
         [SerializeField] private GameObject inicioBadge;
+        [SerializeField] private GameObject chatBadge;
         [SerializeField] private TextMeshProUGUI badgeText;
+        [SerializeField] private TextMeshProUGUI chatBadgeText;
 
         [Header("Icons")]
         [SerializeField] private Sprite deliveryIcon;
@@ -30,6 +32,7 @@ namespace IndiGame.Phone
         [SerializeField] private Sprite checkIcon;
 
         private int badgeCount = 0;
+        private int chatBadgeCount = 0;
         private Vector2 hiddenPos = new Vector2(0, 100f);
         private Vector2 visiblePos = new Vector2(0, -20f);
         private float animationDuration = 0.5f;
@@ -57,7 +60,7 @@ namespace IndiGame.Phone
 
         private void HandleMessageReceived(IndiGame.Core.MessageData data)
         {
-            ShowNewDelivery(data.Content);
+            ShowNewDelivery(data.messageText);
         }
 
         private void HandleRatingChanged(float rating)
@@ -112,7 +115,14 @@ namespace IndiGame.Phone
         {
             if (Instance == null) return;
             Instance.Notify(Instance.deliveryIcon, "NUEVA ENTREGA", $"Destino: {address}", new Color(1f, 0.42f, 0.21f)); // Naranja #FF6B35
-            Instance.IncrementBadge();
+            Instance.IncrementInicioBadge();
+        }
+
+        public static void ShowNewChatMessage(string sender, string text)
+        {
+            if (Instance == null) return;
+            Instance.Notify(Instance.deliveryIcon, sender, text, new Color(0.1f, 0.42f, 1f)); // Azul para chat
+            Instance.IncrementChatBadge();
         }
 
         private void Notify(Sprite icon, string title, string body, Color accent)
@@ -154,15 +164,27 @@ namespace IndiGame.Phone
             bannerPanel.anchoredPosition = hiddenPos;
         }
 
-        private void IncrementBadge()
+        private void IncrementInicioBadge()
         {
             badgeCount++;
             UpdateBadgeUI();
         }
 
-        public void ClearBadge()
+        private void IncrementChatBadge()
+        {
+            chatBadgeCount++;
+            UpdateBadgeUI();
+        }
+
+        public void ClearInicioBadge()
         {
             badgeCount = 0;
+            UpdateBadgeUI();
+        }
+
+        public void ClearChatBadge()
+        {
+            chatBadgeCount = 0;
             UpdateBadgeUI();
         }
 
@@ -172,6 +194,12 @@ namespace IndiGame.Phone
             {
                 inicioBadge.SetActive(badgeCount > 0);
                 if (badgeText != null) badgeText.text = badgeCount.ToString();
+            }
+
+            if (chatBadge != null)
+            {
+                chatBadge.SetActive(chatBadgeCount > 0);
+                if (chatBadgeText != null) chatBadgeText.text = chatBadgeCount.ToString();
             }
         }
     }
