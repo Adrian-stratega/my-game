@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 using IndiGame.Core;
 
 namespace IndiGame.Player
@@ -50,8 +51,11 @@ namespace IndiGame.Player
         /// </summary>
         private void HandleMovement()
         {
-            float moveX = Input.GetAxis("Horizontal");
-            float moveZ = Input.GetAxis("Vertical");
+            var keyboard = Keyboard.current;
+            if (keyboard == null) return;
+
+            float moveX = (keyboard.dKey.isPressed ? 1f : 0f) - (keyboard.aKey.isPressed ? 1f : 0f);
+            float moveZ = (keyboard.wKey.isPressed ? 1f : 0f) - (keyboard.sKey.isPressed ? 1f : 0f);
 
             Vector3 move = transform.right * moveX + transform.forward * moveZ;
             
@@ -69,10 +73,16 @@ namespace IndiGame.Player
         /// </summary>
         private void HandleLook()
         {
-            float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;
-            float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity;
+            var mouse = Mouse.current;
+            if (mouse == null) return;
+
+            float mouseX = mouse.delta.x.ReadValue() * (mouseSensitivity * 0.1f);
+            float mouseY = mouse.delta.y.ReadValue() * (mouseSensitivity * 0.1f);
 
             cameraPitch -= mouseY;
+#if UNITY_EDITOR
+            // Ajuste para el editor si el delta es muy alto
+#endif
             cameraPitch = Mathf.Clamp(cameraPitch, -maxLookAngle, maxLookAngle);
 
             if (playerCamera != null)

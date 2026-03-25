@@ -1,11 +1,14 @@
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.InputSystem;
 using IndiGame.Core;
 using System.Collections;
 
 namespace IndiGame.Player
 {
+    // ... rest of the file ...
+    // Note: I'll include the necessary changes in HandleInput
     /// <summary>
     /// Estados posibles del teléfono.
     /// </summary>
@@ -73,28 +76,33 @@ namespace IndiGame.Player
         /// </summary>
         private void HandleInput()
         {
+            var keyboard = Keyboard.current;
+            var mouse = Mouse.current;
+
+            if (keyboard == null || mouse == null) return;
+
             // Toggle POCKET <-> ACTIVE (F o Click Derecho)
-            if (Input.GetKeyDown(KeyCode.F) || Input.GetMouseButtonDown(1))
+            if (keyboard.fKey.wasPressedThisFrame || mouse.rightButton.wasPressedThisFrame)
             {
+                Debug.Log($"[PhoneController] KeyDown. State: {currentState}");
+                TogglePocketActive();
                 inputTimer = 0f;
                 isLongPressing = true;
             }
 
-            if (isLongPressing)
+            if (isLongPressing && (keyboard.fKey.isPressed || mouse.rightButton.isPressed))
             {
                 inputTimer += Time.deltaTime;
                 if (inputTimer >= longPressThreshold)
                 {
-                    // Long Press detectado: Toggle ACTIVE <-> FULLSCREEN
+                    Debug.Log("[PhoneController] Long Press Triggered");
                     ToggleFullscreen();
                     isLongPressing = false;
                 }
             }
 
-            if ((Input.GetKeyUp(KeyCode.F) || Input.GetMouseButtonUp(1)) && isLongPressing)
+            if (keyboard.fKey.wasReleasedThisFrame || mouse.rightButton.wasReleasedThisFrame)
             {
-                // Click corto detectado: Toggle POCKET <-> ACTIVE
-                TogglePocketActive();
                 isLongPressing = false;
             }
         }
