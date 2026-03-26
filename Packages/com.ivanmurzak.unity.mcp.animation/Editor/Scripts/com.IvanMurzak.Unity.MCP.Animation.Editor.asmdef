@@ -1,0 +1,19 @@
+{
+    "name": "com.IvanMurzak.Unity.MCP.Animation.Editor",
+    "references": [
+        "com.IvanMurzak.Unity.MCP.Editor",
+        "com.IvanMurzak.Unity.MCP.Runtime",
+        "com.IvanMurzak.Unity.MCP.Animation.Runtime"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

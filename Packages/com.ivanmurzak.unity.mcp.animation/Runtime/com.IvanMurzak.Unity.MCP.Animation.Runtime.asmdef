@@ -1,0 +1,15 @@
+{
+    "name": "com.IvanMurzak.Unity.MCP.Animation.Runtime",
+    "references": [
+        "com.IvanMurzak.Unity.MCP.Runtime"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
