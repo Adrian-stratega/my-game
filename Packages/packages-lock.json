@@ -32,21 +32,21 @@
       }
     },
     "com.ivanmurzak.unity.mcp.particlesystem": {
-      "version": "1.0.43",
+      "version": "1.0.44",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.ivanmurzak.unity.mcp": "0.60.0",
+        "com.ivanmurzak.unity.mcp": "0.61.0",
         "com.unity.modules.particlesystem": "1.0.0"
       },
       "url": "https://package.openupm.com"
     },
     "com.ivanmurzak.unity.mcp.probuilder": {
-      "version": "1.0.55",
+      "version": "1.0.56",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.ivanmurzak.unity.mcp": "0.60.0",
+        "com.ivanmurzak.unity.mcp": "0.61.0",
         "com.unity.probuilder": "5.2.4"
       },
       "url": "https://package.openupm.com"
