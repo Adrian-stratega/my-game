@@ -3,7 +3,6 @@
     "rootNamespace": "",
     "references": [
         "com.IvanMurzak.Unity.MCP.Editor",
-        "com.IvanMurzak.Unity.MCP.Editor.Tests",
         "com.IvanMurzak.Unity.MCP.Runtime",
         "com.IvanMurzak.Unity.MCP.TestFiles",
         "com.IvanMurzak.Unity.MCP.Animation.Runtime",
@@ -26,9 +25,9 @@
         "McpPlugin.Common.dll",
         "R3.dll"
     ],
-    "autoReferenced": true,
+    "autoReferenced": false,
     "defineConstraints": [
-        "UNITY_INCLUDE_TESTS"
+        "MCP_ANIM_TESTS_ENABLED"
     ],
     "versionDefines": [],
     "noEngineReferences": false
