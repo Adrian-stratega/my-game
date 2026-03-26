@@ -1109,7 +1109,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 876052466}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1373066510}
+  m_Script: {fileID: 11500000, guid: f77f0659a3279734c96c6b74155e3004, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::IndiGame.Player.PhoneController
   currentState: 0
@@ -1131,15 +1131,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 876052466}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 2095351628}
+  m_Script: {fileID: 11500000, guid: 1c0e0aa4e26bd5e4da4631ddbc37de00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::IndiGame.Player.PlayerController
-  walkSpeed: 2.5
-  playerCamera: {fileID: 1211511754}
+  moveSpeed: 5
+  sprintMultiplier: 1.6
+  jumpHeight: 1.2
+  gravity: -9.81
+  cameraTransform: {fileID: 0}
   mouseSensitivity: 2
-  maxLookAngle: 85
-  bobAmplitude: 0.05
-  bobFrequency: 1.5
+  topClamp: 85
+  bottomClamp: -85
   canMove: 1
 --- !u!1 &974486054
 GameObject:
@@ -1924,21 +1926,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1359780388}
   m_CullTransparentMesh: 1
---- !u!115 &1373066510
-MonoScript:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 
-  serializedVersion: 7
-  m_DefaultReferences: {}
-  m_Icon: {fileID: 0}
-  m_Type: 0
-  m_ExecutionOrder: 0
-  m_ClassName: PhoneController
-  m_Namespace: IndiGame.Player
-  m_AssemblyName: Assembly-CSharp
 --- !u!1 &1414577538
 GameObject:
   m_ObjectHideFlags: 0
@@ -2382,7 +2369,7 @@ Transform:
   m_GameObject: {fileID: 1587887433}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 20, z: 25}
+  m_LocalPosition: {x: 0, y: 15, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2551,7 +2538,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1.5
+      scalar: 2
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -2604,7 +2591,7 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 15
+      scalar: 12
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -3046,7 +3033,7 @@ ParticleSystem:
     gravityModifier:
       serializedVersion: 2
       minMaxState: 0
-      scalar: -0.3
+      scalar: 0.3
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -3107,7 +3094,7 @@ ParticleSystem:
     donutRadius: 0.2
     m_Position: {x: 0, y: 0, z: 0}
     m_Rotation: {x: 0, y: 0, z: 0}
-    m_Scale: {x: 40, y: 1, z: 30}
+    m_Scale: {x: 60, y: 1, z: 50}
     placementMode: 0
     m_MeshMaterialIndex: 0
     m_MeshNormalOffset: 0
@@ -8307,21 +8294,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1824183836}
   m_CullTransparentMesh: 1
---- !u!115 &2095351628
-MonoScript:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 
-  serializedVersion: 7
-  m_DefaultReferences: {}
-  m_Icon: {fileID: 0}
-  m_Type: 0
-  m_ExecutionOrder: 0
-  m_ClassName: PlayerController
-  m_Namespace: IndiGame.Player
-  m_AssemblyName: Assembly-CSharp
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
