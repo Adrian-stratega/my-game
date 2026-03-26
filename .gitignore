@@ -41,3 +41,6 @@ task.md
 .gemini/
 .mcp.json
 .system_generated/
+
+# Kilocode VS Code extension (no incluir en repo)
+.kilocode/
