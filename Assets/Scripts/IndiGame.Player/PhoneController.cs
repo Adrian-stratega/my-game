@@ -7,8 +7,6 @@ using System.Collections;
 
 namespace IndiGame.Player
 {
-    // ... rest of the file ...
-    // Note: I'll include the necessary changes in HandleInput
     /// <summary>
     /// Estados posibles del teléfono.
     /// </summary>
@@ -23,10 +21,14 @@ namespace IndiGame.Player
     /// <summary>
     /// Controlador principal del sistema de teléfono/HUD.
     /// </summary>
+    [RequireComponent(typeof(PlayerController))]
     public class PhoneController : MonoBehaviour
     {
         [Header("State")]
         [SerializeField] private PhoneState currentState = PhoneState.PHONE_HIDDEN;
+        /// <summary>
+        /// Obtiene el estado actual del teléfono.
+        /// </summary>
         public PhoneState CurrentState => currentState;
 
         [Header("Animation Settings")]
@@ -47,29 +49,27 @@ namespace IndiGame.Player
         [SerializeField] private Volume postProcessVolume;
 
         private Vignette vignette;
-        private float fovLerpTimer = 0f;
         private float inputTimer = 0f;
         private bool isLongPressing = false;
 
-        // Posiciones del panel (Mockup)
+        // Posiciones del panel (Basadas en el diseño oficial B8)
         private Vector2 posHidden = new Vector2(0, -600f);
-        private Vector2 posPocket = new Vector2(400f, -400f); // Esquina inferior derecha
+        private Vector2 posPocket = new Vector2(400f, -400f); 
         private Vector2 posActive = new Vector2(0, 0f);
-        private Vector2 posFullscreen = new Vector2(0, 0f); // Se ajustará vía escala/ancho si es necesario
 
         private void Awake()
         {
             playerController = GetComponent<PlayerController>();
 
-            if (postProcessVolume != null && postProcessVolume.profile.TryGet(out vignette))
+            if (postProcessVolume != null && postProcessVolume.profile != null && postProcessVolume.profile.TryGet(out vignette))
             {
                 // Cache vignette
             }
 
             if (playerCamera == null) playerCamera = Camera.main;
             
+            // Forzar ocultación inicial
             if (phoneCanvas != null) phoneCanvas.SetActive(false);
-            
             SetState(PhoneState.PHONE_HIDDEN, true);
         }
 
@@ -78,9 +78,6 @@ namespace IndiGame.Player
             HandleInput();
         }
 
-        /// <summary>
-        /// Maneja la entrada del usuario para el teléfono.
-        /// </summary>
         private void HandleInput()
         {
             var keyboard = Keyboard.current;
@@ -91,7 +88,6 @@ namespace IndiGame.Player
             // Toggle POCKET <-> ACTIVE (F o Click Derecho)
             if (keyboard.fKey.wasPressedThisFrame || mouse.rightButton.wasPressedThisFrame)
             {
-                Debug.Log($"[PhoneController] KeyDown. State: {currentState}");
                 TogglePocketActive();
                 inputTimer = 0f;
                 isLongPressing = true;
@@ -102,7 +98,6 @@ namespace IndiGame.Player
                 inputTimer += Time.deltaTime;
                 if (inputTimer >= longPressThreshold)
                 {
-                    Debug.Log("[PhoneController] Long Press Triggered");
                     ToggleFullscreen();
                     isLongPressing = false;
                 }
@@ -114,9 +109,6 @@ namespace IndiGame.Player
             }
         }
 
-        /// <summary>
-        /// Cambia entre los estados Pocket y Active.
-        /// </summary>
         private void TogglePocketActive()
         {
             if (currentState == PhoneState.PHONE_POCKET || currentState == PhoneState.PHONE_HIDDEN)
@@ -125,9 +117,6 @@ namespace IndiGame.Player
                 SetState(PhoneState.PHONE_POCKET);
         }
 
-        /// <summary>
-        /// Cambia entre los estados Active y Fullscreen.
-        /// </summary>
         private void ToggleFullscreen()
         {
             if (currentState == PhoneState.PHONE_ACTIVE)
@@ -137,8 +126,10 @@ namespace IndiGame.Player
         }
 
         /// <summary>
-        /// Cambia el estado del teléfono y dispara las transiciones correspondientes.
+        /// Cambia el estado del teléfono y actualiza la visualización y el cursor.
         /// </summary>
+        /// <param name="newState">El nuevo estado al que cambiar.</param>
+        /// <param name="immediate">Si se debe aplicar el cambio sin animaciones.</param>
         public void SetState(PhoneState newState, bool immediate = false)
         {
             if (currentState == newState && !immediate) return;
@@ -146,13 +137,15 @@ namespace IndiGame.Player
             PhoneState oldState = currentState;
             currentState = newState;
 
-            // Bloqueo de movimiento y cursor
+            // Bloqueo de movimiento y cursor según GDD
+            bool isInteracting = (newState == PhoneState.PHONE_FULLSCREEN);
+            
             if (playerController != null)
             {
-                playerController.canMove = (newState != PhoneState.PHONE_FULLSCREEN);
+                playerController.canMove = !isInteracting;
             }
 
-            if (newState == PhoneState.PHONE_FULLSCREEN)
+            if (isInteracting)
             {
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
@@ -163,8 +156,11 @@ namespace IndiGame.Player
                 Cursor.visible = false;
             }
 
-            if (phoneCanvas != null && newState != PhoneState.PHONE_HIDDEN)
-                phoneCanvas.SetActive(true);
+            // Activar canvas si el estado no es HIDDEN
+            if (phoneCanvas != null)
+            {
+                phoneCanvas.SetActive(newState != PhoneState.PHONE_HIDDEN);
+            }
 
             StopAllCoroutines();
             StartCoroutine(TransitionRoutine(newState, immediate));
@@ -188,7 +184,6 @@ namespace IndiGame.Player
             float targetVignette = 0f;
             float targetFOV = defaultFOV;
             Vector2 targetPos = posHidden;
-            float targetWidthPercent = 0.35f;
 
             switch (state)
             {
@@ -197,7 +192,7 @@ namespace IndiGame.Player
                     targetPos = posHidden;
                     break;
                 case PhoneState.PHONE_POCKET:
-                    targetAlpha = 0.5f; // Icono pequeño visible
+                    targetAlpha = 0.5f;
                     targetPos = posPocket;
                     break;
                 case PhoneState.PHONE_ACTIVE:
@@ -205,27 +200,22 @@ namespace IndiGame.Player
                     targetVignette = 0.25f;
                     targetFOV = activeFOV;
                     targetPos = posActive;
-                    targetWidthPercent = 0.35f;
                     break;
                 case PhoneState.PHONE_FULLSCREEN:
                     targetAlpha = 1.0f;
                     targetVignette = 0.45f;
                     targetFOV = activeFOV;
                     targetPos = posActive;
-                    targetWidthPercent = 1.0f;
                     break;
             }
 
             float elapsed = 0f;
             float startAlpha = phoneCanvasGroup != null ? phoneCanvasGroup.alpha : 0f;
-            float startVignette = vignette != null ? vignette.intensity.value : 0f;
+            float startVignette = (vignette != null && vignette.intensity != null) ? vignette.intensity.value : 0f;
             float startFOV = playerCamera != null ? playerCamera.fieldOfView : defaultFOV;
             Vector2 startPos = phonePanel != null ? phonePanel.anchoredPosition : posHidden;
 
-            if (immediate)
-            {
-                elapsed = transitionDuration;
-            }
+            if (immediate) elapsed = transitionDuration;
 
             while (elapsed < transitionDuration)
             {
@@ -234,16 +224,15 @@ namespace IndiGame.Player
                 float easedT = Mathf.SmoothStep(0, 1, t);
 
                 if (phoneCanvasGroup != null) phoneCanvasGroup.alpha = Mathf.Lerp(startAlpha, targetAlpha, easedT);
-                if (vignette != null) vignette.intensity.value = Mathf.Lerp(startVignette, targetVignette, easedT);
+                if (vignette != null && vignette.intensity != null) vignette.intensity.value = Mathf.Lerp(startVignette, targetVignette, easedT);
                 if (playerCamera != null) playerCamera.fieldOfView = Mathf.Lerp(startFOV, targetFOV, easedT);
                 if (phonePanel != null) phonePanel.anchoredPosition = Vector2.Lerp(startPos, targetPos, easedT);
 
                 yield return null;
             }
 
-            // Asegurar valores finales
             if (phoneCanvasGroup != null) phoneCanvasGroup.alpha = targetAlpha;
-            if (vignette != null) vignette.intensity.value = targetVignette;
+            if (vignette != null && vignette.intensity != null) vignette.intensity.value = targetVignette;
             if (playerCamera != null) playerCamera.fieldOfView = targetFOV;
             if (phonePanel != null) phonePanel.anchoredPosition = targetPos;
             
@@ -252,15 +241,12 @@ namespace IndiGame.Player
         }
         
         /// <summary>
-        /// Reproduce el sonido de notificación.
+        /// Reproduce el sonido de notificación si el AudioSource está configurado.
         /// </summary>
         public void PlayNotificationSound()
         {
             AudioSource audio = GetComponent<AudioSource>();
-            if (audio != null && audio.clip != null)
-            {
-                audio.Play();
-            }
+            if (audio != null && audio.clip != null) audio.Play();
         }
     }
 }
