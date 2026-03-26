@@ -138,7 +138,7 @@ namespace IndiGame.Player
             currentState = newState;
 
             // Bloqueo de movimiento y cursor según GDD
-            bool isInteracting = (newState == PhoneState.PHONE_FULLSCREEN);
+            bool isInteracting = (newState == PhoneState.PHONE_ACTIVE || newState == PhoneState.PHONE_FULLSCREEN);
             
             if (playerController != null)
             {
