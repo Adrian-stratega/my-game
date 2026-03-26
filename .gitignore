@@ -37,3 +37,7 @@ DerivedData/
 mcp_config.json
 args.json
 task.md
+.claude/
+.gemini/
+.mcp.json
+.system_generated/
